@@ -1,10 +1,9 @@
-# Hide Stowed Hand Item — Dark Souls III 1.15.0
+# Hide Stowed Hand Item — *Dark Souls III*
 
 While you two-hand one hand's weapon, the other hand's sheathed model is no longer drawn on your back. Works for
 anything hand-equippable: weapons, shields, catalysts, bows, staves.
 
-Single-player, offline. Verified on Dark Souls III 1.15.0 (Steam, 64-bit, Windows).
-
+Single-player, offline.
 ## How it works
 
 `HideSheathedLeft.dll` points the sheathed and off-hand model fields of `WEP_ABSORP_POS_PARAM_ST` at a parking
