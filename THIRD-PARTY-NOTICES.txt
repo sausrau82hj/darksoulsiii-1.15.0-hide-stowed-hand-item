@@ -1,0 +1,52 @@
+THIRD-PARTY NOTICES
+===================
+
+Hide Stowed Hand Item (c) 2026 xiangchi7.
+
+The mod itself contains no third-party code and redistributes no game assets: ds3tae edits
+the game files the user already owns. The components below are used by, or referenced from,
+this repository.
+
+--------------------------------------------------------------------------------
+1. SoulsFormats
+--------------------------------------------------------------------------------
+    Project: JKAnderson/SoulsFormats (fork of TKGP/SoulsFormats)
+    Source:  https://github.com/JKAnderson/SoulsFormats
+    License: GNU General Public License v3.0
+
+Linked by ds3tae (validator/ and tools/ds3tae.*), which is therefore distributed under
+GPL-3.0 as well; see validator/LICENSE. The mod DLLs (src/HideSheathedLeft.cpp,
+src/xinput1_3_proxy.cpp) do not link or include SoulsFormats and stay under the MIT
+license in LICENSE.
+
+The SoulsFormats build shipped as tools/SoulsFormats.dll corresponds to the source above;
+a copy of that source can be obtained from the link, and the full license text ships in
+validator/LICENSE.
+
+--------------------------------------------------------------------------------
+2. .NET runtime
+--------------------------------------------------------------------------------
+    Project: dotnet/runtime
+    Source:  https://github.com/dotnet/runtime
+    License: MIT
+
+ds3tae targets .NET 10 and is run by the .NET runtime installed on the user's machine.
+No runtime binaries are redistributed here.
+
+--------------------------------------------------------------------------------
+3. Mod Engine / Mod Engine 2 / me3
+--------------------------------------------------------------------------------
+    Mod Engine       https://www.nexusmods.com/darksouls3/mods/332    (Katalash, no published license)
+    Mod Engine 2     https://github.com/soulsmods/ModEngine2         (MIT, discontinued)
+    me3              https://github.com/garyttierney/me3             (MIT / Apache-2.0)
+
+Optional loaders described in the README for people who would rather not use the bundled
+xinput1_3.dll shell. None of them is included or required.
+
+--------------------------------------------------------------------------------
+4. Game
+--------------------------------------------------------------------------------
+    DARK SOULS III (c) FromSoftware, Inc. / Bandai Namco Entertainment Inc.
+
+No Dark Souls III data is distributed with this repository or its release archives.
+Single-player, offline use only.
