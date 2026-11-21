@@ -129,6 +129,9 @@ cl /nologo /O2 /EHsc /std:c++17 /DNDEBUG /LD src\xinput1_3_proxy.cpp /Fe:xinput1
 dotnet build validator\validator.csproj
 ```
 
+`dotnet build` writes `ds3tae.exe` and `ds3tae.dll` into `validator\bin\…`; nothing built is committed, and the
+release asset `ds3-hshi-ds3tae-v1.0.0.zip` carries the assembly for people who do not want to build it.
+
 ## Repository layout
 
 ```
@@ -136,7 +139,7 @@ HideSheathedLeft.dll / .ini   mod core and its configuration
 xinput1_3.dll                 loader shell (forwards the system XInput)
 src\                          C++ sources of both DLLs
 validator\                    C# source of ds3tae (patch / verify / strip) + its GPL-3.0 text
-tools\                        ds3tae build output and SoulsFormats.dll
+tools\SoulsFormats.dll        the reference the validator build needs
 docs\MANUAL-INSTALL.txt       longer walkthrough with troubleshooting
 LICENSE, THIRD-PARTY-NOTICES  licenses, and what is not MIT
 CHANGELOG.md                  release notes
