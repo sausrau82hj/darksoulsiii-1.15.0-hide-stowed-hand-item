@@ -3,10 +3,9 @@ THIRD-PARTY NOTICES
 
 Hide Stowed Hand Item (c) 2026 xiangchi7.
 
-The mod itself contains no third-party code. The optional models pack redistributes modified
-FromSoftware character models; everything else ships source-shaped only, and ds3tae edits the
-game files the user already owns. The components below are used by, shipped with, or
-referenced from this repository.
+The mod DLLs contain no third-party code. The optional models pack redistributes modified
+FromSoftware character models; ds3tae edits the game files the user already owns. The
+components below are used by, shipped with, or referenced from this repository.
 
 --------------------------------------------------------------------------------
 1. SoulsFormats

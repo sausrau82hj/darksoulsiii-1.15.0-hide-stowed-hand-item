@@ -1,4 +1,4 @@
-HideStowedHandItem 1.0.6 — manual installation (no scripts)
+HideStowedHandItem 1.0.0 — manual installation (no scripts)
 ================================================================
 Target: Dark Souls III / Steam / 1.15.0 (64-bit)
 
@@ -36,7 +36,7 @@ Where things are in THIS package
 --------------------------------------------------------------------------
 1. Copy the mod core and its configuration
 --------------------------------------------------------------------------
-    HideSheathedLeft.dll  ->  <game>\HideSheathedLeft.dll      (~211 KB)
+    HideSheathedLeft.dll  ->  <game>\HideSheathedLeft.dll      (~191 KB)
     HideSheathedLeft.ini  ->  <game>\HideSheathedLeft.ini
 
     The ini ships with usable defaults; the README documents every key.
@@ -45,10 +45,13 @@ Where things are in THIS package
                               RIGHT weapon)
         HideRightHang=1       mirror image (two-handing the LEFT weapon)
         HideBothPaired=1      hide the spare model of a one-handed paired weapon
-        Rescan=1              0 = stop the periodic address-space re-scan
-                              (the performance switch, see step 5)
+        PairedFields=1,2,3    which models of a paired weapon to hide
         ExtraMods=            other DLLs the shell should load too
                               (comma- or space-separated; empty = none)
+
+    The ini carries only those behaviour keys.  Everything else (Rescan,
+    HidePoly, the probe keys) is documented as diagnostics in the README and
+    takes its default when absent.
 
 --------------------------------------------------------------------------
 2. Copy the loader shell (xinput1_3.dll)
@@ -111,7 +114,7 @@ Where things are in THIS package
 --------------------------------------------------------------------------
 5. If it stutters
 --------------------------------------------------------------------------
-    Set Rescan=0 in the ini.  The one-time start-up scan is what walks the
+    Add Rescan=0 to the ini (it is not shipped).  The one-time start-up scan is what walks the
     process's memory regions; with Rescan=0 nothing re-scans after it and the
     mod is reduced to a few reads per second.  Trade-off: if the engine
     rebuilds its parameter table mid-session the effect can stay off until the

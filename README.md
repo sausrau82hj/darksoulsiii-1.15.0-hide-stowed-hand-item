@@ -13,7 +13,7 @@ the prepared models or add them to your own with `ds3tae`.
 
 | Release asset | Contents |
 |---|---|
-| `ds3-hshi-v1.0.0.zip` | `HideSheathedLeft.dll`, `HideSheathedLeft.ini`, docs — 215 KB |
+| `ds3-hshi-v1.0.0.zip` | `HideSheathedLeft.dll`, `HideSheathedLeft.ini`, docs — 196 KB |
 | `ds3-hshi-chr-models-v1.0.0.zip` | 165 patched `chr\*.chrbnd.dcx` — 342 MB |
 | `ds3-hshi-ds3tae-v1.0.0.zip` | the patcher: .NET 10 assembly, run `dotnet ds3tae.dll <command>` |
 
@@ -25,8 +25,8 @@ the game reading patched character models.
 ### Route 1 — unpacked game
 
 1. Unpack the game with UXM: **Unpack**, then **Patch**, so the game reads loose files instead of its archives.
-2. Get patched models into `Game\chr` — either copy the `chr` folder from `ds3-hshi-chr-models-v1.0.0.zip` over it,
-   or patch your own copies:
+2. Get patched models into `Game\chr` — either copy the `chr` folder from `ds3-hshi-chr-models-v1.0.0.zip` over it
+   (back up `Game\chr` first), or patch your own copies:
 
    ```
    dotnet ds3tae.dll parkdir "<chr>" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
@@ -37,9 +37,9 @@ the game reading patched character models.
 3. Copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into `Game\`, then start the game.
 
 `xinput1_3.dll` is a stand-in for the system XInput library: the game loads it from its own folder, it forwards every
-XInput call to the real DLL (controllers keep working) and then loads `HideSheathedLeft.dll`. Only one
-`xinput1_3.dll` fits in a folder, so rename another mod's copy first if there is one — or skip the shell entirely and
-use a loader, as in route 2.
+XInput call to the real DLL (controllers keep working) and then loads `HideSheathedLeft.dll`. It has to sit in
+`Game\` — anywhere else the game never loads it — and only one `xinput1_3.dll` fits in a folder, so rename another
+mod's copy first if there is one. Skip it entirely and use a loader instead, as in route 2.
 
 ### Route 2 — Mod Engine
 
@@ -135,9 +135,11 @@ dotnet build validator\validator.csproj
 HideSheathedLeft.dll / .ini   mod core and its configuration
 xinput1_3.dll                 loader shell (forwards the system XInput)
 src\                          C++ sources of both DLLs
-validator\                    C# source of ds3tae (patch / verify / strip)
+validator\                    C# source of ds3tae (patch / verify / strip) + its GPL-3.0 text
 tools\                        ds3tae build output and SoulsFormats.dll
 docs\MANUAL-INSTALL.txt       longer walkthrough with troubleshooting
+LICENSE, THIRD-PARTY-NOTICES  licenses, and what is not MIT
+CHANGELOG.md                  release notes
 ```
 
 ## License
