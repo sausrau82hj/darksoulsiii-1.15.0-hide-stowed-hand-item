@@ -47,13 +47,17 @@ A loader does both jobs: it serves the `chr` folder as an override and it loads 
 changes and the game needs no unpacking.
 
 1. Make one mod folder holding `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and a `chr` folder with the patched
-   models (from the models pack, or patched by you as in route 1 step 2).
+   models (from the models pack, or patched by you as in route 1 step 2). No `xinput1_3.dll` goes in there — the
+   loader injects `HideSheathedLeft.dll` itself.
 2. Point the loader at that folder: [me](https://www.nexusmods.com/darksouls3/mods/2410),
    [me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3).
+3. If `xinput1_3.dll` from route 1 is still in `Game\`, delete it and put your own copy back — with a loader the
+   shell does nothing useful and only keeps the name occupied.
 
 ## Uninstall
 
-- **Route 2** — remove the mod folder from the loader profile.
+- **Route 2** — remove the mod folder from the loader profile. If `Game\xinput1_3.dll` is still there from an earlier
+  route 1 install, delete it (and put back the copy it replaced).
 - **Route 1** — delete `HideSheathedLeft.dll` and `.ini`, put your own `xinput1_3.dll` back, then restore `Game\chr`
   from your backup, or delete the loose `chr\*.chrbnd.dcx` files and let the game read its archives.
 - **Patched models left behind** — strip the dummies instead:
