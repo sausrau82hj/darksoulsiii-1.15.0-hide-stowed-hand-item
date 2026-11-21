@@ -16,7 +16,7 @@ Where things are in THIS package
 
     The patcher, ds3tae, is NOT in this archive: Nexus uploads may not contain
     executables.  Download ds3tae.zip from the GitHub releases page, unpack it
-    somewhere (it needs the .NET 10 runtime) and run ds3tae.exe from there; the
+    somewhere (it needs the .NET 10 runtime) and run dotnet ds3tae.dll from there; the
     commands below assume it is on your PATH or in the current folder.
 
 --------------------------------------------------------------------------
@@ -65,11 +65,11 @@ Where things are in THIS package
     Editing 165 files by hand is not practical.  From the folder you unpacked
     this package into:
 
-        ds3tae.exe parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
+        dotnet ds3tae.dll parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
 
     Add DRYRUN as the last argument to see what it would do without writing:
 
-        ds3tae.exe parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd" DRYRUN
+        dotnet ds3tae.dll parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd" DRYRUN
 
     Each file is verified before it is written (bone list, materials, meshes
     and buffer layouts must be unchanged, every original dummy entry stays
@@ -82,7 +82,7 @@ Where things are in THIS package
 --------------------------------------------------------------------------
 4. Verify
 --------------------------------------------------------------------------
-        ds3tae.exe verify "<game>\chr" chrbnd "382,383"
+        dotnet ds3tae.dll verify "<game>\chr" chrbnd "382,383"
 
     The answer you want:
         scanned N file(s), N with an FLVER … files still carrying 382,383: N
@@ -127,14 +127,14 @@ Where things are in THIS package
            no other loader);
         c) put the character models back from your own copies (step 0).
            Without copies, remove dummy 382/383 from every model:
-             ds3tae.exe stripdir "<game>\chr" INPLACE "382,383" "chrbnd"
+             dotnet ds3tae.dll stripdir "<game>\chr" INPLACE "382,383" "chrbnd"
            (add DRYRUN as the last argument to only see what it would do).
            The strip restores the models structurally, but a re-serialised
            bundle is NOT byte-identical to the original (DCX re-compression).
            For exact bytes use your own backup, or delete the loose
            chr\*.chrbnd.dcx files and let the game read the packed ones.
            Prove the result:
-             ds3tae.exe verify "<game>\chr" chrbnd "382,383"
+             dotnet ds3tae.dll verify "<game>\chr" chrbnd "382,383"
            A clean game ends in "verify: CLEAN".
 
 --------------------------------------------------------------------------
@@ -142,7 +142,7 @@ Where things are in THIS package
 --------------------------------------------------------------------------
 * Black triangles / flicker: a character model has no dummy 382/383, so the
   engine builds a degenerate attach matrix.  Prove it with
-    ds3tae.exe verify "<game>\chr" chrbnd "382,383"
+    dotnet ds3tae.dll verify "<game>\chr" chrbnd "382,383"
   — "files still carrying 382,383" must equal the number of scanned files.
   Setting HidePoly=383 in the ini only helps when the models really carry 383.
 * After some launches the item stays on your back (no artefacts): the engine

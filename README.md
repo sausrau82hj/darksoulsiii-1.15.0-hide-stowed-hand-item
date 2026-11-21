@@ -18,7 +18,8 @@ no game assets are redistributed here.
 - Loose `Game\chr\*.chrbnd.dcx` (a UXM-unpacked game), or a mod loader that overrides `chr\` — see below.
 - [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0) for the patcher.
 - The `ds3tae` patcher from the [releases page](https://github.com/sausrau82hj/darksoulsiii-hide-stowed-hand-item/releases).
-  It is not inside the mod archive: executables are not allowed in Nexus uploads.
+  It is not inside the mod archive and it is not an executable: `ds3tae` is a .NET assembly, run as
+  `dotnet ds3tae.dll <command>`. A local `dotnet build` also produces a `ds3tae.exe` that takes the same arguments.
 
 ## Install
 
@@ -29,13 +30,13 @@ Close the game. `<game>` below is `...\DARK SOULS III\Game`.
 3. Add the parking dummies to every character model:
 
    ```
-   ds3tae.exe parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
+   dotnet ds3tae.dll parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
    ```
 
 4. Check the result — both numbers must match:
 
    ```
-   ds3tae.exe verify "<game>\chr" chrbnd "382,383"
+   dotnet ds3tae.dll verify "<game>\chr" chrbnd "382,383"
    ```
 
 5. Start the game. Models are read at process start, so a restart is needed.
@@ -86,7 +87,7 @@ left-hand stance. The older key `HidePairedOffhand` is still read when `HideBoth
 3. Restore `chr\` from your backup. Without one, strip the dummies instead:
 
    ```
-   ds3tae.exe stripdir "<game>\chr" INPLACE "382,383" "chrbnd"
+   dotnet ds3tae.dll stripdir "<game>\chr" INPLACE "382,383" "chrbnd"
    ```
 
    A stripped bundle is structurally identical but not byte-identical (the DCX is re-compressed). For exact bytes
