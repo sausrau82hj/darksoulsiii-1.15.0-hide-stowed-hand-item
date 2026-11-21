@@ -105,7 +105,7 @@ Where things are in THIS package
       * cancel the two-hand grip or attack with the sheathed hand -> it comes
         back.
 
-    Nothing happens at all: make sure HideLeftHang=1, Probe=0, and both
+    Nothing happens at all: make sure HideLeftHang=1 and both
     HideSheathedLeft.dll and xinput1_3.dll sit directly in <game>.
 
 --------------------------------------------------------------------------

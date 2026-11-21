@@ -70,6 +70,8 @@ changes and the game needs no unpacking.
 
 `HideSheathedLeft.ini` is re-read every second: edit, save, done. A missing file means all defaults.
 
+### Behaviour
+
 | Key | Default | Meaning |
 |---|---|---|
 | `HideLeftHang` | `1` | hide the sheathed left-hand item (reached by two-handing the **right** weapon) |
@@ -79,14 +81,33 @@ changes and the game needs no unpacking.
 | `HidePoly` | `382` | parking dummy id (`383` spare) |
 | `IntervalSeconds` | `1` | how often the parameter values are re-asserted |
 | `Rescan` | `1` | `0` = stop the periodic address-space re-scan (the performance switch) |
-| `ScanMapped` | `0` | `1` = also consider MEM_MAPPED regions (diagnostic) |
-| `Probe` | `0` | `1` = observation only, writes nothing |
+
+`HideLeftHang=0` restores vanilla for the right-hand two-hand stance only; `HideRightHang=0` does the same for the
+left-hand stance. The older key `HidePairedOffhand` is still read when `HideBothPaired` is absent.
+
+### Loader shell
+
+Only read by `xinput1_3.dll`; irrelevant when a mod loader injects the DLL directly.
+
+| Key | Default | Meaning |
+|---|---|---|
 | `LoadCore` | `1` | `0` = the shell loads no core DLL, so the mod can stay installed but off |
 | `ExtraMods` | *(empty)* | further DLLs for the shell to load as well, comma- or space-separated; when the key is missing entirely it falls back to `dkp_loader.dll` |
 | `ExtraModsDelayMs` | `0` | how long the shell waits before loading `ExtraMods` |
 
-`HideLeftHang=0` restores vanilla for the right-hand two-hand stance only; `HideRightHang=0` does the same for the
-left-hand stance. The older key `HidePairedOffhand` is still read when `HideBothPaired` is absent.
+### Diagnostics
+
+Not in the shipped ini — add them only while investigating something. Output goes to the debugger
+(`OutputDebugString`), never to a file.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `Probe` | `0` | `1` = observation only, writes nothing to the game |
+| `ProbeAll` | `0` | `1` = probe every write it sees instead of stopping at the first |
+| `ProbeLimit` | `2000` | how many probe hits to collect |
+| `ProbeRearmMs` | `100` | delay before the probe arms again |
+| `ScanMapped` | `0` | `1` = also consider MEM_MAPPED regions during the scan |
+| `WorldChrManOffset` | `0x4768E78` | `WorldChrMan` offset, only used by the probe path |
 
 ## Known limitations
 
