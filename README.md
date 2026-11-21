@@ -13,7 +13,6 @@ no game assets are redistributed here.
 
 ## Requirements
 
-- Dark Souls III 1.15.0, Steam, 64-bit, Windows.
 - Loose `Game\chr\*.chrbnd.dcx` (a UXM-unpacked game), or a mod loader that overrides `chr\` — see below.
 - [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0) for the patcher.
 - The `ds3tae` patcher from the [releases page](https://github.com/sausrau82hj/darksoulsiii-hide-stowed-hand-item/releases).
