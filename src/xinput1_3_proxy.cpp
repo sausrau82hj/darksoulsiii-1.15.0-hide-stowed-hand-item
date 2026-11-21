@@ -15,18 +15,13 @@ std::wstring g_dir;
 std::wstring g_ini;
 
 void LogLine(const wchar_t* fmt, ...) {
-    const std::wstring path = g_dir + L"\\xinput1_3_proxy.log";
-    if (FILE* f = _wfopen(path.c_str(), L"a, ccs=UTF-8")) {
-        SYSTEMTIME st;
-        GetLocalTime(&st);
-        fwprintf(f, L"[%02d:%02d:%02d] ", st.wHour, st.wMinute, st.wSecond);
-        va_list ap;
-        va_start(ap, fmt);
-        vfwprintf(f, fmt, ap);
-        va_end(ap);
-        fwprintf(f, L"\n");
-        fclose(f);
-    }
+    wchar_t buf[1024];
+    va_list ap;
+    va_start(ap, fmt);
+    _vsnwprintf_s(buf, 1024, _TRUNCATE, fmt, ap);
+    va_end(ap);
+    OutputDebugStringW(buf);
+    OutputDebugStringW(L"\n");
 }
 
 std::wstring SelfDir(HMODULE mod) {

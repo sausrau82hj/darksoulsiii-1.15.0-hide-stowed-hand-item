@@ -56,7 +56,6 @@ struct Config {
     bool hideLeftHang      = true;
     bool hideRightHang     = true;
     bool hidePairedOffhand = true;
-    bool log               = true;
     int  intervalMs        = 1000;
 
     int  hidePoly          = kParkPolyDefault;
@@ -84,9 +83,6 @@ struct TableState {
 
 Config       g_cfg;
 std::wstring g_iniPath;
-std::wstring g_logPath;
-CRITICAL_SECTION g_logLock;
-bool         g_logLockReady = false;
 bool         g_loggedConfig = false;
 
 bool SafeCopy(void* dst, const void* src, size_t n) {
@@ -99,21 +95,13 @@ bool SafeCopy(void* dst, const void* src, size_t n) {
 }
 
 void Log(const char* fmt, ...) {
-    if (!g_cfg.log || !g_logLockReady) return;
-    EnterCriticalSection(&g_logLock);
-    if (FILE* f = _wfopen(g_logPath.c_str(), L"a, ccs=UTF-8")) {
-        SYSTEMTIME st;
-        GetLocalTime(&st);
-        fwprintf(f, L"[%02d:%02d:%02d] ", st.wHour, st.wMinute, st.wSecond);
-        char buf[1024];
-        va_list ap;
-        va_start(ap, fmt);
-        _vsnprintf_s(buf, sizeof(buf), _TRUNCATE, fmt, ap);
-        va_end(ap);
-        fwprintf(f, L"%hs\n", buf);
-        fclose(f);
-    }
-    LeaveCriticalSection(&g_logLock);
+    char buf[1024];
+    va_list ap;
+    va_start(ap, fmt);
+    _vsnprintf_s(buf, sizeof(buf), _TRUNCATE, fmt, ap);
+    va_end(ap);
+    OutputDebugStringA(buf);
+    OutputDebugStringA("\n");
 }
 
 std::wstring ModuleDir(HMODULE mod) {
@@ -127,7 +115,6 @@ std::wstring ModuleDir(HMODULE mod) {
 void LoadConfig() {
     Config c;
     c.hideLeftHang      = GetPrivateProfileIntW(L"general", L"HideLeftHang", 1, g_iniPath.c_str()) != 0;
-    c.log               = GetPrivateProfileIntW(L"general", L"Log", 1, g_iniPath.c_str()) != 0;
 
     const UINT bothPairedRaw = GetPrivateProfileIntW(L"general", L"HideBothPaired", 0xFFFFFF, g_iniPath.c_str());
     c.hidePairedOffhand = (bothPairedRaw != 0xFFFFFF)
@@ -190,17 +177,16 @@ void LoadConfig() {
                          (c.pairedL[2] != g_cfg.pairedL[2]) ||
                          (c.probe != g_cfg.probe) ||
                          (c.probeAll != g_cfg.probeAll) ||
-                         (c.probeLimit != g_cfg.probeLimit) ||
-                         (c.log != g_cfg.log);
+                         (c.probeLimit != g_cfg.probeLimit);
     g_cfg = c;
 
     if (changed || !g_loggedConfig) {
         g_loggedConfig = true;
-        Log("config: HideLeftHang=%d HideRightHang=%d HideBothPaired=%d PairedFields=R%d%d%d/L%d%d%d IntervalSeconds=%d Log=%d HidePoly=%d Probe=%d ScanMapped=%d Rescan=%d",
+        Log("config: HideLeftHang=%d HideRightHang=%d HideBothPaired=%d PairedFields=R%d%d%d/L%d%d%d IntervalSeconds=%d HidePoly=%d Probe=%d ScanMapped=%d Rescan=%d",
             (int)g_cfg.hideLeftHang, (int)g_cfg.hideRightHang, (int)g_cfg.hidePairedOffhand,
             (int)g_cfg.pairedR[0], (int)g_cfg.pairedR[1], (int)g_cfg.pairedR[2],
             (int)g_cfg.pairedL[0], (int)g_cfg.pairedL[1], (int)g_cfg.pairedL[2],
-            g_cfg.intervalMs / 1000, (int)g_cfg.log, g_cfg.hidePoly, (int)g_cfg.probe,
+            g_cfg.intervalMs / 1000, g_cfg.hidePoly, (int)g_cfg.probe,
             (int)g_cfg.scanMapped, (int)g_cfg.allowRescan);
     }
 }
@@ -764,11 +750,8 @@ BOOL APIENTRY DllMain(HMODULE mod, DWORD reason, LPVOID) {
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(mod);
         g_exeBase = (uint64_t)GetModuleHandleW(nullptr);
-        InitializeCriticalSection(&g_logLock);
-        g_logLockReady = true;
         const std::wstring dir = ModuleDir(mod);
         g_iniPath = dir + L"\\HideSheathedLeft.ini";
-        g_logPath = dir + L"\\HideSheathedLeft.log";
         LoadConfig();
         Log("--- HideSheathedLeft %s loaded (pid %lu) ---", kVersion, GetCurrentProcessId());
         if (HANDLE th = CreateThread(nullptr, 0, Worker, nullptr, 0, nullptr)) {

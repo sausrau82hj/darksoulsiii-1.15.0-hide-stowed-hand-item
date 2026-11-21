@@ -19,39 +19,43 @@ the prepared models or add them to your own with `ds3tae`.
 
 ## Install
 
-Two choices to make: where the patched models come from, and how the DLL gets loaded. The game must be closed.
+The game must be closed. `HideSheathedLeft.dll` and `HideSheathedLeft.ini` belong together and either route ends with
+the game reading patched character models.
 
-### Models — pick one
+### Route 1 — unpacked game
 
-**A. Prepared models.** Unzip `ds3-hshi-chr-models-v1.0.0.zip` and treat its `chr` folder as a mod folder. Nothing
-is unpacked or patched. It replaces every character model, so it conflicts with other mods that edit `chr`.
+1. Unpack the game with UXM: **Unpack**, then **Patch**, so the game reads loose files instead of its archives.
+2. Get patched models into `Game\chr` — either copy the `chr` folder from `ds3-hshi-chr-models-v1.0.0.zip` over it,
+   or patch your own copies:
 
-**B. Patch your own.** Extract `chr\*.chrbnd.dcx` (UXM **Unpack** is enough — no exe patch needed), keep the copies
-in one folder, then:
+   ```
+   dotnet ds3tae.dll parkdir "<chr>" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
+   dotnet ds3tae.dll verify  "<chr>" chrbnd "382,383"
+   ```
 
-```
-dotnet ds3tae.dll parkdir "<chr>" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
-dotnet ds3tae.dll verify  "<chr>" chrbnd "382,383"
-```
+   The two numbers printed by `verify` must match.
+3. Copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into `Game\`, then start the game.
 
-The two numbers printed by `verify` must match. Nothing is redistributed on this route, and other model mods keep
-working, but you need `ds3tae` and the [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0).
+`xinput1_3.dll` is a stand-in for the system XInput library: the game loads it from its own folder, it forwards every
+XInput call to the real DLL (controllers keep working) and then loads `HideSheathedLeft.dll`. Only one
+`xinput1_3.dll` fits in a folder, so rename another mod's copy first if there is one — or skip the shell entirely and
+use a loader, as in route 2.
 
-### Loading — pick one
+### Route 2 — Mod Engine
 
-Load `HideSheathedLeft.dll` with [me](https://www.nexusmods.com/darksouls3/mods/2410),
-[me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3) — or with the bundled
-`xinput1_3.dll` shell. Either way the DLL and the ini sit next to the `chr` folder. With a loader, nothing in the
-game folder changes; with the shell, copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into
-`Game\` and the patched models into `Game\chr`, which needs the game unpacked with UXM **Unpack** *and* **Patch**.
-The shell only loads this DLL and forwards XInput, so controllers are unaffected; one `xinput1_3.dll` per game
-folder, so rename another mod's copy first if there is one.
+A loader does both jobs: it serves the `chr` folder as an override and it loads the DLL, so nothing in the game folder
+changes and the game needs no unpacking.
+
+1. Make one mod folder holding `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and a `chr` folder with the patched
+   models (from the models pack, or patched by you as in route 1 step 2).
+2. Point the loader at that folder: [me](https://www.nexusmods.com/darksouls3/mods/2410),
+   [me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3).
 
 ## Uninstall
 
-- **Loader** — remove the mod folder from the loader profile.
-- **No loader** — delete `HideSheathedLeft.dll` and `.ini`, put your own `xinput1_3.dll` back, then restore
-  `Game\chr` from your backup, or delete the loose `chr\*.chrbnd.dcx` files and let the game read its archives.
+- **Route 2** — remove the mod folder from the loader profile.
+- **Route 1** — delete `HideSheathedLeft.dll` and `.ini`, put your own `xinput1_3.dll` back, then restore `Game\chr`
+  from your backup, or delete the loose `chr\*.chrbnd.dcx` files and let the game read its archives.
 - **Patched models left behind** — strip the dummies instead:
 
   ```
@@ -77,7 +81,6 @@ folder, so rename another mod's copy first if there is one.
 | `Rescan` | `1` | `0` = stop the periodic address-space re-scan (the performance switch) |
 | `ScanMapped` | `0` | `1` = also consider MEM_MAPPED regions (diagnostic) |
 | `Probe` | `0` | `1` = observation only, writes nothing |
-| `Log` | `0` | `1` = write `HideSheathedLeft.log` next to the ini (diagnostics only) |
 | `LoadCore` | `1` | `0` = the shell loads no core DLL, so the mod can stay installed but off |
 | `ExtraMods` | *(empty)* | further DLLs for the shell to load as well, comma- or space-separated; when the key is missing entirely it falls back to `dkp_loader.dll` |
 | `ExtraModsDelayMs` | `0` | how long the shell waits before loading `ExtraMods` |

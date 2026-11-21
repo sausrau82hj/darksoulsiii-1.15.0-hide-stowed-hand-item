@@ -4,3 +4,8 @@
 # build output
 obj/
 bin/
+
+# intermediate build files
+*.obj
+*.lib
+*.exp
