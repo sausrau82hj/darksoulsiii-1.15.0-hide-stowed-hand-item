@@ -78,9 +78,6 @@ changes and the game needs no unpacking.
 | `HideRightHang` | `1` | mirror image: hide the sheathed right-hand item (reached by two-handing the **left** weapon) |
 | `HideBothPaired` | `1` | hide the spare model of a one-handed paired weapon, **both hands** |
 | `PairedFields` | `1,2,3` | which models of a paired weapon to hide: `1` = blade only (keeps the scabbard), `none` = leave paired weapons alone |
-| `HidePoly` | `382` | parking dummy id (`383` spare) |
-| `IntervalSeconds` | `1` | how often the parameter values are re-asserted |
-| `Rescan` | `1` | `0` = stop the periodic address-space re-scan (the performance switch) |
 
 `HideLeftHang=0` restores vanilla for the right-hand two-hand stance only; `HideRightHang=0` does the same for the
 left-hand stance. The older key `HidePairedOffhand` is still read when `HideBothPaired` is absent.
@@ -95,13 +92,16 @@ Only read by `xinput1_3.dll`; irrelevant when a mod loader injects the DLL direc
 | `ExtraMods` | *(empty)* | further DLLs for the shell to load as well, comma- or space-separated; when the key is missing entirely it falls back to `dkp_loader.dll` |
 | `ExtraModsDelayMs` | `0` | how long the shell waits before loading `ExtraMods` |
 
-### Diagnostics
+### Diagnostics and tuning
 
-Not in the shipped ini — add them only while investigating something. Output goes to the debugger
-(`OutputDebugString`), never to a file.
+Not in the shipped ini — add them only while investigating something or chasing a stutter. Log output goes to the
+debugger (`OutputDebugString`), never to a file.
 
 | Key | Default | Meaning |
 |---|---|---|
+| `Rescan` | `1` | `0` = stop the periodic address-space re-scan (the stutter switch) |
+| `IntervalSeconds` | `1` | how often the parameter values are re-asserted |
+| `HidePoly` | `382` | parking dummy id (`383` spare) |
 | `Probe` | `0` | `1` = observation only, writes nothing to the game |
 | `ProbeAll` | `0` | `1` = probe every write it sees instead of stopping at the first |
 | `ProbeLimit` | `2000` | how many probe hits to collect |
