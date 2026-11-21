@@ -1,12 +1,11 @@
-# HideStowedHandItem — Dark Souls III 1.15.0
+# Hide Stowed Hand Item — *Dark Souls III*
 
 While you two-hand one hand's weapon, the **other hand's sheathed model is no longer drawn on your back**. Works for anything hand-equippable: weapons, shields, catalysts, bows, staves.
 
-> Dark Souls III **1.15.0** (Steam, 64-bit). Local memory + model changes only. Online play has a server-side save sanity check — use it offline.
+> Local memory + model changes only. Online play has a server-side save sanity check — use it offline.
 
 ## Requirements
 
-* Verified only on Dark Souls III 1.15.0 (Steam, 64-bit).
 * A **loose-file setup** (`Game\chr\*.chrbnd.dcx` exists — the normal state after unpacking with UXM, which model mods require).
 * Windows.
 
