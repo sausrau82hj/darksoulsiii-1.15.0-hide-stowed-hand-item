@@ -39,18 +39,13 @@ working, but you need `ds3tae` and the [.NET 10 runtime](https://dotnet.microsof
 
 ### Loading — pick one
 
-**With a loader** (nothing in the game folder changes). Put `HideSheathedLeft.dll` and `HideSheathedLeft.ini` next
-to the models and let [me](https://www.nexusmods.com/darksouls3/mods/2410),
-[me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3) inject the DLL:
-
-- **me3** — a profile with `natives` = the DLL and `packages` = the folder holding `chr`.
-- **me2** — `external_dlls` = the DLL, plus the mod folder as `mod`.
-- **me** — `modOverrideDirectory="\mod"` and `chainDInput8DLLPath="\HideSheathedLeft.dll"` in `modengine.ini`.
-
-**Without a loader.** Copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into `Game\`, and put
-the patched models into `Game\chr` — that needs the game unpacked with UXM **Unpack** *and* **Patch**, since loose
-files are ignored otherwise. `xinput1_3.dll` only loads this DLL and forwards XInput, so controllers are unaffected;
-one `xinput1_3.dll` per game folder, so rename the other mod's copy first if there is one.
+Load `HideSheathedLeft.dll` with [me](https://www.nexusmods.com/darksouls3/mods/2410),
+[me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3) — or with the bundled
+`xinput1_3.dll` shell. Either way the DLL and the ini sit next to the `chr` folder. With a loader, nothing in the
+game folder changes; with the shell, copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into
+`Game\` and the patched models into `Game\chr`, which needs the game unpacked with UXM **Unpack** *and* **Patch**.
+The shell only loads this DLL and forwards XInput, so controllers are unaffected; one `xinput1_3.dll` per game
+folder, so rename another mod's copy first if there is one.
 
 ## Uninstall
 
@@ -83,8 +78,9 @@ one `xinput1_3.dll` per game folder, so rename the other mod's copy first if the
 | `ScanMapped` | `0` | `1` = also consider MEM_MAPPED regions (diagnostic) |
 | `Probe` | `0` | `1` = observation only, writes nothing |
 | `Log` | `0` | `1` = write `HideSheathedLeft.log` next to the ini (diagnostics only) |
-| `LoadCore` | `1` | `0` = the loader shell loads nothing, so the mod can stay installed but off |
-| `ExtraMods` | *(empty)* | must stay empty — loading additional DLLs on 1.15.0 crashes the game |
+| `LoadCore` | `1` | `0` = the shell loads no core DLL, so the mod can stay installed but off |
+| `ExtraMods` | *(empty)* | further DLLs for the shell to load as well, comma- or space-separated; when the key is missing entirely it falls back to `dkp_loader.dll` |
+| `ExtraModsDelayMs` | `0` | how long the shell waits before loading `ExtraMods` |
 
 `HideLeftHang=0` restores vanilla for the right-hand two-hand stance only; `HideRightHang=0` does the same for the
 left-hand stance. The older key `HidePairedOffhand` is still read when `HideBothPaired` is absent.

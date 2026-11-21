@@ -47,7 +47,8 @@ Where things are in THIS package
         HideBothPaired=1      hide the spare model of a one-handed paired weapon
         Rescan=1              0 = stop the periodic address-space re-scan
                               (the performance switch, see step 5)
-        ExtraMods=            must stay empty (extra DLLs crash 1.15.0)
+        ExtraMods=            other DLLs the shell should load too
+                              (comma- or space-separated; empty = none)
 
 --------------------------------------------------------------------------
 2. Copy the loader shell (xinput1_3.dll)
@@ -104,9 +105,8 @@ Where things are in THIS package
       * cancel the two-hand grip or attack with the sheathed hand -> it comes
         back.
 
-    Nothing happens at all: make sure HideLeftHang=1, Probe=0, ExtraMods is
-    empty, and both HideSheathedLeft.dll and xinput1_3.dll sit directly in
-    <game>.
+    Nothing happens at all: make sure HideLeftHang=1, Probe=0, and both
+    HideSheathedLeft.dll and xinput1_3.dll sit directly in <game>.
 
 --------------------------------------------------------------------------
 5. If it stutters
