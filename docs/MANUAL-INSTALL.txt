@@ -1,6 +1,11 @@
 HideStowedHandItem 1.0.6 — manual installation (no scripts)
 ================================================================
 Target: Dark Souls III / Steam / 1.15.0 (64-bit)
+
+This file covers the do-it-yourself route only: you patch your own chr files with ds3tae.
+If you use the prepared models pack (ds3-hshi-chr-models-<version>.zip), skip all of it —
+that pack is dropped into a mod folder and needs no unpacking, no patch and no backup.
+
 Default game folder, written <game> below:
     D:\Steam\steamapps\common\DARK SOULS III\Game
 

@@ -1,64 +1,75 @@
 # Hide Stowed Hand Item — *Dark Souls III*
 
-While you two-hand one hand's weapon, the other hand's sheathed model is no longer drawn on your back. Works for
-anything hand-equippable: weapons, shields, catalysts, bows, staves.
+Two-hand one weapon and the other hand's sheathed model stops being drawn on your back — weapons, shields,
+catalysts, bows, staves. Single-player, offline.
 
-Single-player, offline.
 ## How it works
 
 `HideSheathedLeft.dll` points the sheathed and off-hand model fields of `WEP_ABSORP_POS_PARAM_ST` at a parking
-dummy (`382`, spare `383`). That dummy is a zero-size locator, so the item attaches and draws nothing. The dummies
-have to exist in the character models, which is what `ds3tae` adds — the tool edits the files you already own, and
-no game assets are redistributed here.
+dummy (382, spare 383) that sits out of view. Those dummies have to exist in the character models, so either install
+the prepared models or add them to your own with `ds3tae`.
 
-## Requirements
+## Files
 
-- Loose `Game\chr\*.chrbnd.dcx` (a UXM-unpacked game), or a mod loader that overrides `chr\` — see below.
-- [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0) for the patcher.
-- The `ds3tae` patcher from the [releases page](https://github.com/sausrau82hj/darksoulsiii-hide-stowed-hand-item/releases).
-  It is not inside the mod archive and it is not an executable: `ds3tae` is a .NET assembly, run as
-  `dotnet ds3tae.dll <command>`. A local `dotnet build` also produces a `ds3tae.exe` that takes the same arguments.
+| Release asset | Contents |
+|---|---|
+| `ds3-hshi-v1.0.0.zip` | `HideSheathedLeft.dll`, `HideSheathedLeft.ini`, docs — 215 KB |
+| `ds3-hshi-chr-models-v1.0.0.zip` | 165 patched `chr\*.chrbnd.dcx` — 342 MB |
+| `ds3-hshi-ds3tae-v1.0.0.zip` | the patcher: .NET 10 assembly, run `dotnet ds3tae.dll <command>` |
 
 ## Install
 
-Close the game. `<game>` below is `...\DARK SOULS III\Game`.
+Two choices to make: where the patched models come from, and how the DLL gets loaded. The game must be closed.
 
-1. Copy into `Game\`: `HideSheathedLeft.dll`, `HideSheathedLeft.ini`, `xinput1_3.dll`.
-2. Back up `Game\chr\*.chrbnd.dcx` (about 340 MB for 165 models). That backup is your uninstall.
-3. Add the parking dummies to every character model:
+### Models — pick one
 
-   ```
-   dotnet ds3tae.dll parkdir "<game>\chr" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
-   ```
+**A. Prepared models.** Unzip `ds3-hshi-chr-models-v1.0.0.zip` and treat its `chr` folder as a mod folder. Nothing
+is unpacked or patched. It replaces every character model, so it conflicts with other mods that edit `chr`.
 
-4. Check the result — both numbers must match:
+**B. Patch your own.** Extract `chr\*.chrbnd.dcx` (UXM **Unpack** is enough — no exe patch needed), keep the copies
+in one folder, then:
 
-   ```
-   dotnet ds3tae.dll verify "<game>\chr" chrbnd "382,383"
-   ```
+```
+dotnet ds3tae.dll parkdir "<chr>" INPLACE "382,383" "0,-1000,0" 0 "chrbnd"
+dotnet ds3tae.dll verify  "<chr>" chrbnd "382,383"
+```
 
-5. Start the game. Models are read at process start, so a restart is needed.
+The two numbers printed by `verify` must match. Nothing is redistributed on this route, and other model mods keep
+working, but you need `ds3tae` and the [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0).
 
-`xinput1_3.dll` only exists to make the game load `HideSheathedLeft.dll`; it forwards the XInput exports to the
-system DLL, so controllers are unaffected. One `xinput1_3.dll` can live in the game folder — if another mod owns
-it, rename that file or load this DLL through a mod loader instead.
+### Loading — pick one
 
-## With a mod loader
+**With a loader** (nothing in the game folder changes). Put `HideSheathedLeft.dll` and `HideSheathedLeft.ini` next
+to the models and let [me](https://www.nexusmods.com/darksouls3/mods/2410),
+[me2](https://github.com/soulsmods/ModEngine2) or [me3](https://github.com/garyttierney/me3) inject the DLL:
 
-A loader loads `HideSheathedLeft.dll` for you and can serve the patched `chr\` files from its own mod folder, so
-neither `xinput1_3.dll` nor `Game\chr` has to change. Extract the originals once, run `parkdir` on the copies,
-then point the loader at that folder:
+- **me3** — a profile with `natives` = the DLL and `packages` = the folder holding `chr`.
+- **me2** — `external_dlls` = the DLL, plus the mod folder as `mod`.
+- **me** — `modOverrideDirectory="\mod"` and `chainDInput8DLLPath="\HideSheathedLeft.dll"` in `modengine.ini`.
 
-- **me3** (maintained) — [releases](https://github.com/garyttierney/me3/releases): a profile with a `natives`
-  entry for the DLL and a `packages` entry for the patched `chr` folder.
-- **Mod Engine 2** (discontinued) — [releases](https://github.com/soulsmods/ModEngine2/releases): `external_dlls`
-  plus a mod folder.
-- **Mod Engine** — [Nexus](https://www.nexusmods.com/darksouls3/mods/332): `modOverrideDirectory="\mod"` and
-  `chainDInput8DLLPath="\HideSheathedLeft.dll"` in `modengine.ini`.
+**Without a loader.** Copy `HideSheathedLeft.dll`, `HideSheathedLeft.ini` and `xinput1_3.dll` into `Game\`, and put
+the patched models into `Game\chr` — that needs the game unpacked with UXM **Unpack** *and* **Patch**, since loose
+files are ignored otherwise. `xinput1_3.dll` only loads this DLL and forwards XInput, so controllers are unaffected;
+one `xinput1_3.dll` per game folder, so rename the other mod's copy first if there is one.
+
+## Uninstall
+
+- **Loader** — remove the mod folder from the loader profile.
+- **No loader** — delete `HideSheathedLeft.dll` and `.ini`, put your own `xinput1_3.dll` back, then restore
+  `Game\chr` from your backup, or delete the loose `chr\*.chrbnd.dcx` files and let the game read its archives.
+- **Patched models left behind** — strip the dummies instead:
+
+  ```
+  dotnet ds3tae.dll stripdir "<chr>" INPLACE "382,383" "chrbnd"
+  ```
+
+  A stripped bundle is structurally identical but not byte-identical (the DCX is re-compressed); `verify` ending in
+  `verify: CLEAN` is what proves it either way.
+- **Effect off only** — `HideLeftHang=0` and `HideRightHang=0` in the ini, applied within a second.
 
 ## Configuration
 
-`HideSheathedLeft.ini` is re-read every second: edit, save, done — no restart. A missing file means all defaults.
+`HideSheathedLeft.ini` is re-read every second: edit, save, done. A missing file means all defaults.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -78,28 +89,12 @@ then point the loader at that folder:
 `HideLeftHang=0` restores vanilla for the right-hand two-hand stance only; `HideRightHang=0` does the same for the
 left-hand stance. The older key `HidePairedOffhand` is still read when `HideBothPaired` is absent.
 
-## Uninstall
-
-1. Delete `Game\HideSheathedLeft.dll` and `Game\HideSheathedLeft.ini`.
-2. Put your own `Game\xinput1_3.dll` back, or delete it if you had none.
-3. Restore `chr\` from your backup. Without one, strip the dummies instead:
-
-   ```
-   dotnet ds3tae.dll stripdir "<game>\chr" INPLACE "382,383" "chrbnd"
-   ```
-
-   A stripped bundle is structurally identical but not byte-identical (the DCX is re-compressed). For exact bytes
-   use the backup, or delete the loose `chr\*.chrbnd.dcx` files and let the game read its archives. Either way,
-   `verify` must end in `verify: CLEAN`.
-
-To only switch the effect off, set `HideLeftHang=0` and `HideRightHang=0`; that applies within a second.
-
 ## Known limitations
 
 - **NPCs hide the item too.** The parameter table is shared, so an NPC in the same stance simply does not draw its
   sheathed item. Player-only behaviour would mean patching the engine's attach resolver.
 - **Other model mods.** After another mod replaces something in `chr\`, run `parkdir` again; patched files are
-  skipped.
+  skipped. The prepared model pack cannot merge with such mods at all.
 - **Black triangles or flicker** mean a model is missing the dummy — run `verify`.
 - **Online.** Only local memory and local model files change, but online play has a server-side save check: stay
   offline.
@@ -130,5 +125,7 @@ docs\MANUAL-INSTALL.txt       longer walkthrough with troubleshooting
 - Mod DLLs, `src\`, `docs\` and this README: MIT — see [`LICENSE`](LICENSE).
 - `validator\` and `tools\ds3tae.*`: GPL-3.0 — see [`validator/LICENSE`](validator/LICENSE). `ds3tae` links
   [SoulsFormats](https://github.com/JKAnderson/SoulsFormats), which is GPL-3.0.
+- The models pack contains modified FromSoftware assets, single-player use only. Details in
+  [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt).
 
-Not affiliated with FromSoftware or Bandai Namco. See [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt).
+Not affiliated with FromSoftware or Bandai Namco.

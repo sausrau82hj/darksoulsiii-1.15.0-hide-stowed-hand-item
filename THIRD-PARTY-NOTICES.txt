@@ -3,9 +3,10 @@ THIRD-PARTY NOTICES
 
 Hide Stowed Hand Item (c) 2026 xiangchi7.
 
-The mod itself contains no third-party code and redistributes no game assets: ds3tae edits
-the game files the user already owns. The components below are used by, or referenced from,
-this repository.
+The mod itself contains no third-party code. The optional models pack redistributes modified
+FromSoftware character models; everything else ships source-shaped only, and ds3tae edits the
+game files the user already owns. The components below are used by, shipped with, or
+referenced from this repository.
 
 --------------------------------------------------------------------------------
 1. SoulsFormats
@@ -48,5 +49,8 @@ xinput1_3.dll shell. None of them is included or required.
 --------------------------------------------------------------------------------
     DARK SOULS III (c) FromSoftware, Inc. / Bandai Namco Entertainment Inc.
 
-No Dark Souls III data is distributed with this repository or its release archives.
-Single-player, offline use only.
+The models pack (ds3-hshi-chr-models-<version>.zip) contains 165 character model files taken
+from DARK SOULS III 1.15.0, each modified only by appending the two parking dummies (382, 383)
+this mod uses. They are distributed for single-player, offline modding free of charge, must not
+be used commercially, and are not covered by the MIT license of this repository. No other game
+data is distributed.
